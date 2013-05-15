@@ -12,10 +12,10 @@ thin wrapper on top of superagent to sign twitter request
 twagent = require('twagent');
 
 twagent
-  .get('1.1/followers/list.json')
-  .query({cursor:-1, screen_name: 'sitestreams', skip_status: true, include_user_entities: false})
-  .consumer(consumerKey, consumerSecret)
-  .token(token, tokenSecret)
+  .get('1.1/followers/list.json') // request type + api path
+  .query({cursor:-1, screen_name: 'sitestreams', skip_status: true, include_user_entities: false}) // query (or send ) parameters
+  .consumer(consumerKey, consumerSecret) // set consumer credentials
+  .token(token, tokenSecret) // set token credentials
   .end(function (err, res) {
     console.log(res.body);
   });
