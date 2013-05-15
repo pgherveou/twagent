@@ -1,6 +1,6 @@
 # twagent
 
-	thin wrapper on top of superagent to sign twitter request
+thin wrapper on top of superagent to sign twitter request
 
 ## Installation
 
