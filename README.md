@@ -13,7 +13,7 @@ twagent = require('twagent');
 
 twagent
   .get('1.1/followers/list.json') // request type + api path
-  .query({cursor:-1, screen_name: 'sitestreams', skip_status: true, include_user_entities: false}) // query (or send ) parameters
+  .query({cursor:-1, screen_name: 'sitestreams'}) // query data (or send for post data)
   .consumer(consumerKey, consumerSecret) // set consumer credentials
   .token(token, tokenSecret) // set token credentials
   .end(function (err, res) {
