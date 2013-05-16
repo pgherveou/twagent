@@ -1,6 +1,7 @@
 var Request = require('superagent').Request
   , util = require('util')
   , crypto = require('crypto')
+  , log = require('debug')('tw')
   , parse = require('url').parse
   , resolve = require('url').resolve
   , methods = require('methods')
@@ -157,18 +158,11 @@ TwAgent.prototype.end = function(fn) {
     Request.prototype.send.call(this, this._body);
   }
 
-  // console.log('\n=== params ===');
-  // console.log(params);
-
   paramStr = Object
     .keys(params)
     .sort()
     .map(function (key) {return key + '=' + params[key];})
     .join('&');
-
-  // console.log('\n=== params str ===');
-  //console.log(paramStr);
-  // console.log(paramStr.split('&').join('\n'));
 
   sigStr = [
     this.method,
@@ -176,26 +170,15 @@ TwAgent.prototype.end = function(fn) {
     percentEncode(paramStr)
   ].join('&');
 
-  // console.log('\n=== sig str ===');
-  //console.log(sigStr);
-  // console.log(sigStr.split('&').join('\n'));
-
   sigKey = [
     percentEncode(this._consumerSecret),
     this._tokenSecret ? percentEncode(this._tokenSecret) : ''
   ].join('&');
 
-  // console.log('\n=== sigKey ===');
-  //console.log(sigKey);
-  // console.log(sigKey.split('&').join('\n'));
-
   sig = crypto
     .createHmac('sha1', sigKey)
     .update(sigStr)
     .digest('base64');
-
-  // console.log('\n=== sig ===');
-  // console.log(sig);
 
   this.oauth('signature', sig);
 
@@ -205,13 +188,9 @@ TwAgent.prototype.end = function(fn) {
     .map(function (key) {return percentEncode(key) + '="' + percentEncode(self._oauthParams[key]) + '"';})
     .join(', ');
 
-  // console.log('\n=== header ===');
-  // console.log('OAuth ', this._oauthParams);
-  //console.log('OAuth ' + oauthVal);
-  // console.log(oauthVal.split(', ').join(',\n'));
+  log('=== header ===\n' + oauthVal.split(', ').join(',\n'));
 
   this.set('Authorization', 'OAuth ' + oauthVal);
-
   Request.prototype.end.apply(this, arguments);
   return this;
 };

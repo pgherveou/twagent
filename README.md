@@ -9,8 +9,9 @@ thin wrapper on top of superagent to sign twitter request
 ## Usage
 
 ```js
-twagent = require('twagent');
+// use DEBUG=tw to print signature header in console
 
+twagent = require('twagent');
 twagent
   .get('1.1/followers/list.json') // request type + api path
   .query({cursor:-1, screen_name: 'sitestreams'}) // query data (or send for post data)
@@ -22,6 +23,8 @@ twagent
     console.log(res.body);
   });
 ```
+
+
 
 ## Api
 
