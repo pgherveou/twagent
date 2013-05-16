@@ -126,10 +126,9 @@ TwAgent.prototype.query = function(data) {
  */
 
 TwAgent.prototype.getUrl = function() {
-  var u = rootUrl
-    , query = qs.stringify(this._query);
-  if (query) u += '?' + query;
-  return u;
+  var query = qs.stringify(this._query);
+  if (query) return this.url + '?' + query;
+  return this.url;
 };
 
 /**
