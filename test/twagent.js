@@ -13,8 +13,9 @@ describe('twagent specs', function() {
   it('should return code 200 when posting to oauth/request_token', function(done) {
     twagent
       .post('oauth/request_token')
-      .consumer(consumerKey, consumerSecret)
+      .oauth('consumer_key', consumerKey)
       .oauth('callback', callbackUrl)
+      .consumerSecret(consumerSecret)
       .end(function (err, res) {
         expect(res.statusCode).to.equal(200);
         expect(res.text).to.be.ok;
@@ -29,8 +30,10 @@ describe('twagent specs', function() {
   it('should return code 200 when making an api get request', function(done) {
     twagent
       .get('1.1/followers/list.json')
-      .consumer(consumerKey, consumerSecret)
-      .token(token, tokenSecret)
+      .oauth('consumer_key', consumerKey)
+      .oauth('token', token)
+      .consumerSecret(consumerSecret)
+      .tokenSecret(tokenSecret)
       .end(function (err, res) {
         expect(res.statusCode).to.equal(200);
         done(err);

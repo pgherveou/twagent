@@ -14,8 +14,10 @@ twagent = require('twagent');
 twagent
   .get('1.1/followers/list.json') // request type + api path
   .query({cursor:-1, screen_name: 'sitestreams'}) // query data (or send for post data)
-  .consumer(consumerKey, consumerSecret) // set consumer credentials
-  .token(token, tokenSecret) // set token credentials
+  .oauth('consumer_key', consumerKey) // set oauth_consumer_key
+  .oauth('token', token) // set oauth_token
+  .consumerSecret(consumerSecret) // set consumer credentials
+  .tokenSecret(tokenSecret) // set token credentials
   .end(function (err, res) {
     console.log(res.body);
   });
@@ -23,17 +25,17 @@ twagent
 
 ## Api
 
-### .consumer(consumerKey, [consumerSecret])
+### .consumerSecret(secret)
 
-set consumer key & consumer Secret
+set consumer Secret
 
-### .token(token, [tokenSecret])
+### .token(tokenSecret)
 
-set token key & token Secret
+set token Secret
 
-### .oauth(key, value)
+### .oauth(key, [value])
 
-set oauth_<key> request header
+get or set oauth_<key> request header
 
 ### .getUrl()
 

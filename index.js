@@ -41,7 +41,6 @@ function TwAgent(method, url) {
   this._oauthParams = {};
   this.oauth('signature_method', 'HMAC-SHA1');
   this.oauth('version', "1.0" );
-  this.set('Accept', 'application/json');
 }
 
 /**
@@ -68,34 +67,28 @@ TwAgent.prototype.oauth = function(key, value) {
 };
 
 /**
- * set consumer credentials
- * @param {String}    key
- * @param {[String]}  secret
+ * set consumer secret
+ * @param {String}  secret
  * @return {TwAgent}
  *
  * @api public
  */
 
-TwAgent.prototype.consumer = function(key, secret) {
-  this._consumerKey = key;
-  this.oauth('consumer_key', key);
-  if (secret) this._consumerSecret = secret;
+TwAgent.prototype.consumerSecret = function(secret) {
+  this._consumerSecret = secret;
   return this;
 };
 
 /**
- * set token credentials
- * @param {String}    key
- * @param {[String]}  secret
+ * set token secret
+ * @param {String}  secret
  * @return {String|TwAgent}
  *
  * @api public
  */
 
-TwAgent.prototype.token = function(key, secret) {
-  this._token = key;
-  this.oauth('token', key);
-  if (secret) this._tokenSecret = secret;
+TwAgent.prototype.tokenSecret = function(secret) {
+  this._tokenSecret = secret;
   return this;
 };
 
