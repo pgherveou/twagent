@@ -1,6 +1,7 @@
 var twagent = require('..')
 , chai = require('chai')
 , expect = chai.expect
+, qs = require('querystring')
 , callbackUrl = process.env.CALL_BACK_URL
 , consumerKey = process.env.CONSUMER_KEY
 , consumerSecret = process.env.CONSUMER_SECRET
@@ -16,6 +17,11 @@ describe('twagent specs', function() {
       .oauth('callback', callbackUrl)
       .end(function (err, res) {
         expect(res.statusCode).to.equal(200);
+        expect(res.text).to.be.ok;
+        var data = qs.parse(res.text);
+        expect(data).to.have.property('oauth_token');
+        expect(data).to.have.property('oauth_token_secret');
+        expect(data).to.have.property('oauth_callback_confirmed');
         done(err);
       });
   });
@@ -30,6 +36,18 @@ describe('twagent specs', function() {
         done(err);
       });
   });
+
+
+  it('should  get request url', function() {
+    var u = twagent
+      .get('1.1/followers/list.json')
+      .query({foo: "bar"})
+      .getUrl();
+    expect(u).to.equal('https://api.twitter.com&foo=bar');
+  });
+
+
+
 
 
 });

@@ -35,6 +35,10 @@ set token key & token Secret
 
 set oauth_<key> request header
 
+### .getUrl()
+
+get full url with query string e.g 'https://api.twitter.com&foo=bar'
+
 ## Test
 
     $ CONSUMER_KEY=... CONSUMER_SECRET=... TOKEN=... TOKEN_SECRET=... make test

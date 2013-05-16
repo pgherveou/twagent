@@ -7,13 +7,11 @@ var Request = require('superagent').Request
   , qs = require('querystring')
   , rootUrl = 'https://api.twitter.com';
 
-
 /**
  * Expose the twagent function.
  */
 
 exports = module.exports = twagent;
-
 
 /**
  * merge src object to dest object using transform to encode keys and values
@@ -101,7 +99,6 @@ TwAgent.prototype.token = function(key, secret) {
   return this;
 };
 
-
 /**
  * set body data
  * @param  {Object} data
@@ -128,6 +125,17 @@ TwAgent.prototype.query = function(data) {
   if ('string' == typeof data) data = qs.parse(data);
   this._query = data || {};
   return this;
+};
+
+/**
+ * get url
+ */
+
+TwAgent.prototype.getUrl = function() {
+  var u = rootUrl
+    , query = qs.stringify(this._query);
+  if (query) u += '&' + query;
+  return u;
 };
 
 /**
