@@ -128,7 +128,7 @@ TwAgent.prototype.query = function(data) {
 TwAgent.prototype.getUrl = function() {
   var u = rootUrl
     , query = qs.stringify(this._query);
-  if (query) u += '&' + query;
+  if (query) u += '?' + query;
   return u;
 };
 
@@ -144,7 +144,7 @@ TwAgent.prototype.end = function(fn) {
   var params = {}, self = this, paramStr, sigStr, sigKey, sig;
 
   this.oauth('nonce', crypto.randomBytes(21).toString('hex'));
-  this.oauth('timestamp', Date.now() / 1000);
+  this.oauth('timestamp',  Math.round(Date.now() / 1000));
 
   merge(params, this._oauthParams, percentEncode);
 
@@ -188,7 +188,7 @@ TwAgent.prototype.end = function(fn) {
     .map(function (key) {return percentEncode(key) + '="' + percentEncode(self._oauthParams[key]) + '"';})
     .join(', ');
 
-  log('=== header ===\n' + oauthVal.split(', ').join(',\n'));
+  log('\n=== header ===\n' + oauthVal.split(', ').join(',\n') + "\n=== header ===");
 
   this.set('Authorization', 'OAuth ' + oauthVal);
   Request.prototype.end.apply(this, arguments);
