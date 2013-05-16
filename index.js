@@ -6,7 +6,8 @@ var Request = require('superagent').Request
   , resolve = require('url').resolve
   , methods = require('methods')
   , qs = require('querystring')
-  , rootUrl = 'https://api.twitter.com';
+  , rootUrl = 'https://api.twitter.com'
+  , identity = function (x) {return x;};
 
 /**
  * Expose the twagent function.
@@ -20,13 +21,17 @@ exports = module.exports = twagent;
  * @param  {Object}   dest
  * @param  {Object}   src
  * @param  {Function} transform
+ * @return {Object}
  * @api private
  */
 
 function merge(dest, src, transform) {
+  if (arguments.length == 2) transform = identity;
+  if (!dest) dest = {};
   Object.keys(src).forEach(function (key) {
     dest[transform(key)] = transform(src[key]);
   });
+  return src;
 }
 
 /**
@@ -102,9 +107,14 @@ TwAgent.prototype.tokenSecret = function(secret) {
  */
 
 TwAgent.prototype.send = function(data) {
-  if ('string' == typeof data) data = qs.parse(data);
-  this._body = data || {};
-  return this;
+  var body;
+  if ('string' == typeof data)
+    body = qs.parse(data);
+  else
+    body = data || {};
+
+  merge((this._body || (this._body = {})), body);
+  return Request.prototype.send.call(this, data);
 };
 
 /**
@@ -116,9 +126,14 @@ TwAgent.prototype.send = function(data) {
  */
 
 TwAgent.prototype.query = function(data) {
-  if ('string' == typeof data) data = qs.parse(data);
-  this._query = data || {};
-  return this;
+  var query;
+  if ('string' == typeof data)
+    query = qs.parse(data);
+  else
+    query = data || {};
+
+  merge((this._query || (this._query = {})), query);
+  return Request.prototype.query.call(this, data);
 };
 
 /**
@@ -140,22 +155,16 @@ TwAgent.prototype.getUrl = function() {
  */
 
 TwAgent.prototype.end = function(fn) {
-  var params = {}, self = this, paramStr, sigStr, sigKey, sig;
+  var params = {}
+    , self = this
+    , body, query, paramStr, sigStr, sigKey, sig;
 
   this.oauth('nonce', crypto.randomBytes(21).toString('hex'));
   this.oauth('timestamp',  Math.round(Date.now() / 1000));
 
   merge(params, this._oauthParams, percentEncode);
-
-  if (this._query) {
-    merge(params, this._query, percentEncode);
-    Request.prototype.query.call(this, this._query);
-  }
-
-  if (this._body) {
-    merge(params, this._body, percentEncode);
-    Request.prototype.send.call(this, this._body);
-  }
+  if (this._query) merge(params, this._query, percentEncode);
+  if (this._body) merge(params, this._body, percentEncode);
 
   paramStr = Object
     .keys(params)

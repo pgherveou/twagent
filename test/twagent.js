@@ -46,7 +46,7 @@ describe('twagent specs', function() {
       .get('1.1/followers/list.json')
       .query({foo: "bar"})
       .getUrl();
-    expect(u).to.equal('https://api.twitter.com?foo=bar');
+    expect(u).to.equal('https://api.twitter.com/1.1/followers/list.json?foo=bar');
   });
 
 
