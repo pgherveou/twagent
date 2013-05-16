@@ -40,9 +40,9 @@ set token Secret
 
 get or set oauth_<key> request header
 
-### .getUrl()
+### .authUrl(token)
 
-get full url with query string e.g 'https://api.twitter.com&foo=bar'
+build the oauth/authenticate url
 
 ## Test
 

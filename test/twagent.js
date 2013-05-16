@@ -40,17 +40,8 @@ describe('twagent specs', function() {
       });
   });
 
-
-  it('should  get request url', function() {
-    var u = twagent
-      .get('1.1/followers/list.json')
-      .query({foo: "bar"})
-      .getUrl();
-    expect(u).to.equal('https://api.twitter.com/1.1/followers/list.json?foo=bar');
+  it('should  get the auth url', function() {
+    expect(twagent.authUrl('fake')).to.equal('https://api.twitter.com/oauth/authenticate?oauth_token=fake');
   });
-
-
-
-
 
 });

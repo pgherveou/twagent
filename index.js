@@ -15,6 +15,19 @@ var Request = require('superagent').Request
 
 exports = module.exports = twagent;
 
+
+/**
+ * get the full authenticate url
+ *
+ * @param  {String} token oauth_token to append to the url query string
+ * @return {String}
+ * @api public
+ */
+
+twagent.authUrl = function(token) {
+  return rootUrl + '/oauth/authenticate?oauth_token=' + token;
+};
+
 /**
  * merge src object to dest object using transform to encode keys and values
  *
@@ -44,6 +57,8 @@ function merge(dest, src, transform) {
 
 function TwAgent(method, url) {
   Request.call(this, method, resolve(rootUrl, url));
+  this._method = method;
+  this._url = resolve(rootUrl, url);
   this._oauthParams = {};
   this.oauth('signature_method', 'HMAC-SHA1');
   this.oauth('version', "1.0" );
@@ -137,24 +152,13 @@ TwAgent.prototype.query = function(data) {
 };
 
 /**
- * get url
- */
-
-TwAgent.prototype.getUrl = function() {
-  var query = qs.stringify(this._query);
-  if (query) return this.url + '?' + query;
-  return this.url;
-};
-
-/**
  * initiate request
  *
- * @param  {Function} fn
  * @return {TwAgent}
  * @api public
  */
 
-TwAgent.prototype.end = function(fn) {
+TwAgent.prototype.end = function() {
   var params = {}
     , self = this
     , body, query, paramStr, sigStr, sigKey, sig;
@@ -199,8 +203,7 @@ TwAgent.prototype.end = function(fn) {
   log('\n=== header ===\n' + oauthVal.split(', ').join(',\n') + "\n=== header ===");
 
   this.set('Authorization', 'OAuth ' + oauthVal);
-  Request.prototype.end.apply(this, arguments);
-  return this;
+  return Request.prototype.end.apply(this, arguments);
 };
 
 /**
