@@ -1,4 +1,4 @@
-var twagent = require('..')
+var twagent = require('../lib')
 , chai = require('chai')
 , expect = chai.expect
 , qs = require('querystring')
