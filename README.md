@@ -17,7 +17,7 @@ inspired by similar facebook wrapper https://github.com/logicalparadox/fbagent
 twagent = require('twagent');
 twagent
   .get('1.1/followers/list.json') // request type + api path
-  .query({cursor:-1, screen_name: 'sitestreams'}) // query data (or send for post data)
+  .data({cursor:-1, screen_name: 'sitestreams'}) // query data
   .consumerSecret(consumerSecret) // set consumer credentials
   .oauth('consumer_key', consumerKey) // set oauth_consumer_key
   .oauth('token', token) // set oauth_token
@@ -38,7 +38,7 @@ app.get('tw-signin', function(req, res, next) {
       .consumerSecret(process.env.CONSUMER_SECRET)
       .oauth('consumer_key', process.env.CONSUMER_KEY)
       .oauth('token', req.query.oauth_token)
-      .send("oauth_verifier=" + req.query.oauth_verifier)
+      .data("oauth_verifier=" + req.query.oauth_verifier)
       .end(function(resp) {
         if (resp.error) return next('tw-connection-err');
         var data = qs.parse(resp.text)
@@ -67,6 +67,10 @@ app.get('tw-signin', function(req, res, next) {
 ### .consumerSecret(secret)
 
 set consumer Secret
+
+### .data(data)
+
+set query string or request body
 
 ### .token(tokenSecret)
 
