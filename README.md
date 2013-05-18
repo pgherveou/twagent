@@ -9,6 +9,24 @@ inspired by similar facebook wrapper https://github.com/logicalparadox/fbagent
 
 ## Example
 
+### get follower list
+
+```js
+// use DEBUG=twagent to print signature header in console
+
+twagent = require('twagent');
+twagent
+  .get('1.1/followers/list.json') // request type + api path
+  .query({cursor:-1, screen_name: 'sitestreams'}) // query data (or send for post data)
+  .consumerSecret(consumerSecret) // set consumer credentials
+  .oauth('consumer_key', consumerKey) // set oauth_consumer_key
+  .oauth('token', token) // set oauth_token
+  .tokenSecret(tokenSecret) // set token credentials
+  .end(function (err, res) {
+    console.log(res.body);
+  });
+```
+
 ### oauth signin flow
 
 ```js
@@ -42,23 +60,6 @@ app.get('tw-signin', function(req, res, next) {
   }
 });
 
-```
-### get follower list
-
-```js
-// use DEBUG=tw to print signature header in console
-
-twagent = require('twagent');
-twagent
-  .get('1.1/followers/list.json') // request type + api path
-  .query({cursor:-1, screen_name: 'sitestreams'}) // query data (or send for post data)
-  .oauth('consumer_key', consumerKey) // set oauth_consumer_key
-  .oauth('token', token) // set oauth_token
-  .consumerSecret(consumerSecret) // set consumer credentials
-  .tokenSecret(tokenSecret) // set token credentials
-  .end(function (err, res) {
-    console.log(res.body);
-  });
 ```
 
 ## Api
