@@ -6,6 +6,7 @@ test:
 		--reporter $(REPORTER) \
 		--timeout 5000 \
 		--growl \
+		--check-leaks \
 		$(TESTS)
 
 
