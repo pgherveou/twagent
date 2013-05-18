@@ -1,6 +1,7 @@
 # twagent
 
 thin wrapper on top of superagent to sign twitter request
+inspired by similar facebook wrapper https://github.com/logicalparadox/fbagent
 
 ## Installation
 
