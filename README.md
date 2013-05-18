@@ -6,7 +6,43 @@ thin wrapper on top of superagent to sign twitter request
 
     $ npm install twagent
 
-## Usage
+## Example
+
+### oauth signin flow
+
+```js
+
+app.get('tw-signin', function(req, res, next) {
+  if (req.query.oauth_token && req.query.oauth_verifier) {
+    twagent
+      .post('oauth/access_token')
+      .consumerSecret(process.env.CONSUMER_SECRET)
+      .oauth('consumer_key', process.env.CONSUMER_KEY)
+      .oauth('token', req.query.oauth_token)
+      .send("oauth_verifier=" + req.query.oauth_verifier)
+      .end(function(resp) {
+        if (resp.error) return next('tw-connection-err');
+        var data = qs.parse(resp.text)
+        // do someting with tw credentials ...
+        // data.user_id, data.oauth_token, data.oauth_token_secret
+    });
+  } else {
+    var callbackUrl = req.host + req.url;
+    twagent
+      .post('oauth/request_token')
+      .consumerSecret(PROCESS_ENV.CONSUMER_SECRET)
+      .oauth('consumer_key', PROCESS_ENV.CONSUMER_KEY)
+      .oauth('callback', callbackUrl)
+      .end(function(resp) {
+        if (resp.error) return next('tw-connection-err');
+        var oauth_token = qs.parse(resp.text).oauth_token;
+        res.redirect(twagent.authUrl(oauth_token));
+    });
+  }
+});
+
+```
+### get follower list
 
 ```js
 // use DEBUG=tw to print signature header in console
@@ -23,8 +59,6 @@ twagent
     console.log(res.body);
   });
 ```
-
-
 
 ## Api
 
