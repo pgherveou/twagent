@@ -1,15 +1,24 @@
-var twagent = require('../lib')
-, chai = require('chai')
-, expect = chai.expect
-, qs = require('querystring')
-, callbackUrl = process.env.CALL_BACK_URL
-, consumerKey = process.env.CONSUMER_KEY
-, consumerSecret = process.env.CONSUMER_SECRET
-, token = process.env.TOKEN
-, tokenSecret = process.env.TOKEN_SECRET
-, tweetId = "335793285580853250";
+var twagent = require('../lib'),
+    chai = require('chai'),
+    expect = chai.expect,
+    qs = require('querystring'),
+    percentEncode = twagent._percentEncode,
+    callbackUrl = process.env.CALL_BACK_URL,
+    consumerKey = process.env.CONSUMER_KEY,
+    consumerSecret = process.env.CONSUMER_SECRET,
+    token = process.env.TOKEN,
+    tokenSecret = process.env.TOKEN_SECRET,
+    tweetId;
+
 
 describe('twagent specs', function() {
+
+  it('should percent encode strings', function() {
+    expect(percentEncode('Ladies + Gentlemen')).to.eq('Ladies%20%2B%20Gentlemen');
+    expect(percentEncode('An encoded string!')).to.eq('An%20encoded%20string%21');
+    expect(percentEncode('Dogs, Cats & Mice')).to.eq('Dogs%2C%20Cats%20%26%20Mice');
+    expect(percentEncode('☃')).to.eq('%E2%98%83');
+  });
 
   it('should post to oauth/request_token', function(done) {
     twagent
@@ -44,29 +53,34 @@ describe('twagent specs', function() {
   it('should post new status', function(done) {
     twagent
       .post('1.1/statuses/update.json')
-      .data({status: "test tweet"})
+      .send({
+        status: 'test !!!',
+        lat: 37.80544394934271,
+        long: -122.42786407470703,
+      'display_coordinates': true
+      })
       .consumerSecret(consumerSecret)
       .tokenSecret(tokenSecret)
       .oauth('token', token)
       .oauth('consumer_key', consumerKey)
       .end(function (res) {
         expect(res.statusCode).to.equal(200);
+        expect(res.body.text).to.equal('test !!!');
         tweetId = res.body.id_str;
         expect(tweetId).to.be.ok;
         done();
       });
   });
 
-  it('should show new status', function(done) {
+  it('should get new status', function(done) {
     twagent
       .get('1.1/statuses/show.json')
-      .data({id: tweetId})
+      .query({ id: tweetId })
       .consumerSecret(consumerSecret)
       .tokenSecret(tokenSecret)
       .oauth('token', token)
       .oauth('consumer_key', consumerKey)
       .end(function (res) {
-        // console.log(res.text, res.statusCode);
         expect(res.statusCode).to.equal(200);
         expect(res.body.id_str).to.eq(tweetId);
         done();
@@ -81,7 +95,6 @@ describe('twagent specs', function() {
       .oauth('token', token)
       .oauth('consumer_key', consumerKey)
       .end(function (res) {
-        // console.log(res.text);
         expect(res.statusCode).to.equal(200);
         done();
       });
