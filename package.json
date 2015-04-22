@@ -1,6 +1,6 @@
 {
   "name": "twagent",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "thin wrapper on top of superagent to sign twitter request",
   "main": "lib/index.js",
   "scripts": {
