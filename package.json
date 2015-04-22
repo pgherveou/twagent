@@ -19,10 +19,9 @@
   "author": "Pierre Herveou",
   "license": "BSD",
   "dependencies": {
-    "superagent": "0.x",
-    "querystring": "0.x",
-    "methods": "0.x",
-    "debug": "0.x"
+    "superagent": "1.x",
+    "methods": "1.x",
+    "debug": "2.x"
   },
   "devDependencies": {
     "chai": "*",

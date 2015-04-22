@@ -57,18 +57,18 @@ describe('twagent specs', function() {
         status: 'test !!!',
         lat: 37.80544394934271,
         long: -122.42786407470703,
-      'display_coordinates': true
+        'display_coordinates': true
       })
       .consumerSecret(consumerSecret)
       .tokenSecret(tokenSecret)
       .oauth('token', token)
       .oauth('consumer_key', consumerKey)
-      .end(function (res) {
+      .end(function (err, res) {
         expect(res.statusCode).to.equal(200);
         expect(res.body.text).to.equal('test !!!');
         tweetId = res.body.id_str;
         expect(tweetId).to.be.ok;
-        done();
+        done(err);
       });
   });
 
@@ -80,10 +80,10 @@ describe('twagent specs', function() {
       .tokenSecret(tokenSecret)
       .oauth('token', token)
       .oauth('consumer_key', consumerKey)
-      .end(function (res) {
+      .end(function (err, res) {
         expect(res.statusCode).to.equal(200);
         expect(res.body.id_str).to.eq(tweetId);
-        done();
+        done(err);
       });
   });
 
@@ -94,9 +94,9 @@ describe('twagent specs', function() {
       .tokenSecret(tokenSecret)
       .oauth('token', token)
       .oauth('consumer_key', consumerKey)
-      .end(function (res) {
+      .end(function (err, res) {
         expect(res.statusCode).to.equal(200);
-        done();
+        done(err);
       });
   });
 
